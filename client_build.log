@@ -1,0 +1,5 @@
+
+> nasa-fe@1.0.2 build
+> BUILD_PATH=../server/public react-scripts build
+
+Creating an optimized production build...

@@ -1,71 +1,61 @@
 import { useMemo } from "react";
-import { 
-  withStyles,
-  Appear,
-  Link,
-  Paragraph,
-  Table,
-  Words,
-} from "arwes";
-
-import Clickable from "../components/Clickable";
-
-const styles = () => ({
-  link: {
-    color: "red",
-    textDecoration: "none",
-  },
-});
+import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const Upcoming = props => {
   const { 
-    entered,
     launches,
-    classes,
     abortLaunch,
   } = props;
 
   const tableBody = useMemo(() => {
     return launches?.filter((launch) => launch.upcoming)
       .map((launch) => {
-        return <tr key={String(launch.flightNumber)}>
-          <td>
-            <Clickable style={{color:"red"}}>
-              <Link className={classes.link} onClick={() => abortLaunch(launch.flightNumber)}>
-                ✖
-              </Link>
-            </Clickable>
-          </td>
-          <td>{launch.flightNumber}</td>
-          <td>{new Date(launch.launchDate).toDateString()}</td>
-          <td>{launch.mission}</td>
-          <td>{launch.rocket}</td>
-          <td>{launch.target}</td>
-        </tr>;
+        return (
+          <TableRow key={String(launch.flightNumber)}>
+            <TableCell>
+              <Button variant="outlined" color="error" onClick={() => abortLaunch(launch.flightNumber)} startIcon={<DeleteIcon />}>
+                Abort
+              </Button>
+            </TableCell>
+            <TableCell>{launch.flightNumber}</TableCell>
+            <TableCell>{new Date(launch.launchDate).toDateString()}</TableCell>
+            <TableCell>{launch.mission}</TableCell>
+            <TableCell>{launch.rocket}</TableCell>
+            <TableCell>{launch.target}</TableCell>
+          </TableRow>
+        );
       });
-  }, [launches, abortLaunch, classes.link]);
+  }, [launches, abortLaunch]);
 
-  return <Appear id="upcoming" animate show={entered}>
-    <Paragraph>Upcoming missions including both SpaceX launches and newly scheduled Zero to Mastery rockets.</Paragraph>
-    <Words animate>Warning! Clicking on the ✖ aborts the mission.</Words>
-    <Table animate show={entered}>
-      <table style={{tableLayout: "fixed"}}>
-        <thead>
-          <tr>
-            <th style={{width: "3rem"}}></th>
-            <th style={{width: "3rem"}}>No.</th>
-            <th style={{width: "10rem"}}>Date</th>
-            <th style={{width: "11rem"}}>Mission</th>
-            <th style={{width: "11rem"}}>Rocket</th>
-            <th>Destination</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tableBody}
-        </tbody>
-      </table>
-    </Table>
-  </Appear>;
+  return (
+    <Box sx={{ p: 2 }}>
+      <Typography variant="h5">Upcoming Missions</Typography>
+      <Typography variant="body1" sx={{ mt: 2 }}>
+        Upcoming missions including both SpaceX launches and newly scheduled Zero to Mastery rockets.
+      </Typography>
+      <Typography variant="body2" color="error" sx={{ mt: 1 }}>
+        Warning! Clicking on the Abort button aborts the mission.
+      </Typography>
+      <TableContainer component={Paper} sx={{ mt: 2 }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell style={{ width: "8rem" }}></TableCell>
+              <TableCell style={{ width: "3rem" }}>No.</TableCell>
+              <TableCell style={{ width: "10rem" }}>Date</TableCell>
+              <TableCell style={{ width: "11rem" }}>Mission</TableCell>
+              <TableCell style={{ width: "11rem" }}>Rocket</TableCell>
+              <TableCell>Destination</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {tableBody}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
+  );
 }
 
-export default withStyles(styles)(Upcoming);
+export default Upcoming;

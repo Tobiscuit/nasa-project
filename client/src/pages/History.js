@@ -1,47 +1,50 @@
 import { useMemo } from "react";
-import { Appear, Table, Paragraph } from "arwes";
+import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
 
 const History = props => {
   const tableBody = useMemo(() => {
     return props.launches?.filter((launch) => !launch.upcoming)
       .map((launch) => {
-        return <tr key={String(launch.flightNumber)}>
-          <td>
-            <span style={
-              {color: launch.success ? "greenyellow" : "red"}
-            }>█</span>
-          </td>
-          <td>{launch.flightNumber}</td>
-          <td>{new Date(launch.launchDate).toDateString()}</td>
-          <td>{launch.mission}</td>
-          <td>{launch.rocket}</td>
-          <td>{launch.customers?.join(", ")}</td>
-        </tr>;
+        return (
+          <TableRow key={String(launch.flightNumber)}>
+            <TableCell>
+              <span style={{ color: launch.success ? "greenyellow" : "red" }}>█</span>
+            </TableCell>
+            <TableCell>{launch.flightNumber}</TableCell>
+            <TableCell>{new Date(launch.launchDate).toDateString()}</TableCell>
+            <TableCell>{launch.mission}</TableCell>
+            <TableCell>{launch.rocket}</TableCell>
+            <TableCell>{launch.customers?.join(", ")}</TableCell>
+          </TableRow>
+        );
       });
   }, [props.launches]);
 
-  return <article id="history">
-    <Appear animate show={props.entered}>
-      <Paragraph>History of mission launches including SpaceX launches starting from the year 2006.</Paragraph>
-      <Table animate>
-        <table style={{tableLayout: "fixed"}}>
-          <thead>
-            <tr>
-              <th style={{width: "2rem"}}></th>
-              <th style={{width: "3rem"}}>No.</th>
-              <th style={{width: "9rem"}}>Date</th>
-              <th>Mission</th>
-              <th style={{width: "7rem"}}>Rocket</th>
-              <th>Customers</th>
-            </tr>
-          </thead>
-          <tbody>
+  return (
+    <Box sx={{ p: 2 }}>
+      <Typography variant="h5">History of mission launches</Typography>
+      <Typography variant="body1" sx={{ mt: 2 }}>
+        History of mission launches including SpaceX launches starting from the year 2006.
+      </Typography>
+      <TableContainer component={Paper} sx={{ mt: 2 }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell style={{ width: "2rem" }}></TableCell>
+              <TableCell style={{ width: "3rem" }}>No.</TableCell>
+              <TableCell style={{ width: "9rem" }}>Date</TableCell>
+              <TableCell>Mission</TableCell>
+              <TableCell style={{ width: "7rem" }}>Rocket</TableCell>
+              <TableCell>Customers</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {tableBody}
-          </tbody>
-        </table>
-      </Table>
-    </Appear>
-  </article>;
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
+  );
 }
   
 export default History;
