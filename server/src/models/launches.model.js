@@ -100,6 +100,15 @@ async function getAllLaunches(skip, limit) {
     .skip(skip)
     .limit(limit);
 
+  // Filter out past launches that are still marked as upcoming
+  const now = new Date();
+  for (const launch of launches) {
+    if (launch.upcoming && new Date(launch.launchDate) < now) {
+      launch.upcoming = false;
+      launch.success = false;
+    }
+  }
+
   console.log(`Returning ${launches.length} launches`);
   return launches;
 }

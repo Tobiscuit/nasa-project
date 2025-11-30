@@ -1,0 +1,10 @@
+
+> nasa-fe@1.0.2 build
+> BUILD_PATH=../server/public react-scripts build
+
+Creating an optimized production build...
+Failed to compile.
+
+Attempted import error: 'use' is not exported from 'react' (imported as 'use').
+
+

@@ -9,6 +9,7 @@
     "react-router-dom": "^5.3.4",
     "react-scripts": "^5.0.1"
   },
+  "proxy": "http://localhost:8000",
   "scripts": {
     "start": "react-scripts start",
     "build": "BUILD_PATH=../server/public react-scripts build",
