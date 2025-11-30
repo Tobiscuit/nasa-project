@@ -1,21 +1,28 @@
 const request = require('supertest');
 const app = require('../../app');
-const { 
+const {
   mongoConnect,
   mongoDisconnect,
 } = require('../../services/mongo');
 const {
   loadPlanetsData,
 } = require('../../models/planets.model');
+const mongoose = require('mongoose');
+const { MongoMemoryServer } = require('mongodb-memory-server');
+
+let mongoServer;
 
 describe('Launches API', () => {
   beforeAll(async () => {
-    await mongoConnect();
+    mongoServer = await MongoMemoryServer.create();
+    const mongoUri = mongoServer.getUri();
+    await mongoose.connect(mongoUri);
     await loadPlanetsData();
   });
 
   afterAll(async () => {
-    await mongoDisconnect();
+    await mongoose.disconnect();
+    await mongoServer.stop();
   });
 
   describe('Test GET /launches', () => {
