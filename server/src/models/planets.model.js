@@ -35,9 +35,11 @@ function loadPlanetsData() {
 }
 
 async function getAllPlanets() {
-  return await planets.find({}, {
+  const allPlanets = await planets.find({}, {
     '_id': 0, '__v': 0,
   });
+  console.log(`Returning ${allPlanets.length} planets`);
+  return allPlanets;
 }
 
 async function savePlanet(planet) {
@@ -49,7 +51,7 @@ async function savePlanet(planet) {
     }, {
       upsert: true,
     });
-  } catch(err) {
+  } catch (err) {
     console.error(`Could not save planet ${err}`);
   }
 }
